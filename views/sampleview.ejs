@@ -6,6 +6,7 @@
     <script type="text/javascript"
 	    src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
     <script type="text/javascript">
+    var viz;
     function initViz() {
       var containerDiv = document.getElementById("vizContainer"),
           url = "http://140.238.54.12/views/_0/sheet5",
@@ -15,14 +16,15 @@
               hideToolbar: true
           };
 
-            var viz = new tableau.Viz(containerDiv, url, options);
+            viz = new tableau.Viz(containerDiv, url, options);
     }
     function prefectureFilter(prefecture) {
             var sheet = viz.getWorkbook().getActiveSheet();
-            if (generation === "") {
+            if (prefecture === "") {
                 sheet.clearFilterAsync("都道府県名");
             } else {
-                sheet.applyFilterAsync("都道府県名", date, tableau.FilterUpdateType.REPLACE);
+              　var list = prefecture.split(',');
+                sheet.applyFilterAsync("都道府県名", list, tableau.FilterUpdateType.REPLACE);
             }
         }
     </script>
@@ -30,10 +32,16 @@
   <body onload="initViz();">
     <div id="vizContainer" style="width:700px; height:600px;"></div>
     <div id="controls" style="padding:20px;">
-        Year: <select id="changePrifectures" onchange="prefectureFilter(value);">
+        地方: <select id="changePrifectures" onchange="prefectureFilter(value);">
             <option value="">All</option>
-            <option value="東京都">東京都</option>
-            <option value="福岡県">福岡県</option>
+            <option value="北海道">北海道</option>
+            <option value="青森県,岩手県,秋田県,宮城県,山形県,福島県">東北</option>
+            <option value="茨城県,栃木県,群馬県,埼玉県,千葉県,神奈川県,東京都">関東</option>
+            <option value="新潟県,富山県,石川県,福井県,山梨県,長野県,岐阜県,静岡県,愛知県">中部</option>
+            <option value="三重県,滋賀県,京都府,大阪府,兵庫県,奈良県,和歌山県">近畿</option>
+            <option value="鳥取県,島根県,岡山県,広島県,山口県">中国</option>
+            <option value="徳島県,香川県,愛媛県,高知県">四国</option>
+            <option value="福岡県,佐賀県,長崎県,熊本県,大分県,宮崎県,鹿児島県,沖縄県">九州</option>
         </select>
     </div><br>
     <a href="/">戻る</a><br>
