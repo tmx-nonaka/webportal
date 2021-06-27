@@ -3,9 +3,39 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript"
+	    src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <script type="text/javascript">
+    function initViz() {
+      var containerDiv = document.getElementById("vizContainer"),
+          url = "http://140.238.54.12/views/_0/sheet5",
+          //url = 'https://public.tableau.com/views/Pokemon_157/PokemonDashboard',
+          options = {
+              hideTabs: true,
+              hideToolbar: true
+          };
+
+            var viz = new tableau.Viz(containerDiv, url, options);
+    }
+    function prefectureFilter(prefecture) {
+            var sheet = viz.getWorkbook().getActiveSheet();
+            if (generation === "") {
+                sheet.clearFilterAsync("都道府県名");
+            } else {
+                sheet.applyFilterAsync("都道府県名", date, tableau.FilterUpdateType.REPLACE);
+            }
+        }
+    </script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <iframe src="http://140.238.54.12/views/_0/1?:embed=yes&:tabs=yes&:toolbar=no" width="800" height="600"></iframe>
+  <body onload="initViz();">
+    <div id="vizContainer" style="width:700px; height:600px;"></div>
+    <div id="controls" style="padding:20px;">
+        Year: <select id="changePrifectures" onchange="prefectureFilter(value);">
+            <option value="">All</option>
+            <option value="東京都">東京都</option>
+            <option value="福岡県">福岡県</option>
+        </select>
+    </div><br>
+    <a href="/">戻る</a><br>
   </body>
 </html>
